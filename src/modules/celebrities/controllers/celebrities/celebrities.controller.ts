@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Param, Body, UsePipes, ValidationPipe, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, UsePipes, ValidationPipe, Put, Delete, Query } from '@nestjs/common';
 
-import { CelebrityReqDto, CelebrityResDto } from './../../dtos';
+import { CelebrityReqDto, CelebrityResDto, GetCelebritiesReqDto, GetCelebritiesResDto } from './../../dtos';
 import { CelebritiesService } from './../../services';
 
 @Controller('celebrities')
@@ -11,8 +11,8 @@ export class CelebritiesController {
     ) {}
 
     @Get()
-    getCelebrities() {
-        return this._celebritiesService.getCelebrities();
+    getCelebrities(@Query() getCelebritiesDto: GetCelebritiesReqDto): Promise<GetCelebritiesResDto> {
+        return this._celebritiesService.getCelebrities(getCelebritiesDto);
     }
 
     @Get('/:slug')

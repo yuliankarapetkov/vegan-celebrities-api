@@ -1,10 +1,10 @@
-import { CelebrityResDto } from './../../dtos/celebrity-res.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { CelebrityReqDto } from './../../dtos';
+import { plainToClass, plainToClassFromExist } from 'class-transformer';
+
+import { CelebrityReqDto, CelebrityResDto, GetCelebritiesReqDto, GetCelebritiesResDto } from './../../dtos';
 import { CelebrityEntity } from './../../entities';
 import { CelebrityRepository } from './../../repositories';
-import { plainToClass, plainToClassFromExist } from 'class-transformer';
 
 @Injectable()
 export class CelebritiesService {
@@ -12,10 +12,30 @@ export class CelebritiesService {
         private _celebrityRepository: CelebrityRepository
     ) {}
 
-    async getCelebrities() {
-        const [ celebrities, count ] = await this._celebrityRepository.findAndCount();
+    async getCelebrities({ search, limit, offset }: GetCelebritiesReqDto): Promise<GetCelebritiesResDto> {
+        const query = this._celebrityRepository.createQueryBuilder('celebrity');
 
-        return { celebrities: plainToClass(CelebrityResDto, celebrities), count };
+        if (search) {
+            query
+                .andWhere('UPPER(celebrity.name) LIKE UPPER(:search)', { search: `%${search}%` })
+                .orWhere('UPPER(celebrity.about) LIKE UPPER(:search)', { search: `%${search}%` })
+                .orWhere('UPPER(celebrity.occupation) LIKE UPPER(:search)', { search: `%${search}%` })
+                .orWhere('UPPER(celebrity.partner) LIKE UPPER(:search)', { search: `%${search}%` });
+        }
+
+        const count = await query.clone().getCount();
+
+        if (limit) {
+            query.limit(limit);
+        }
+
+        if (offset) {
+            query.offset(offset);
+        }
+
+        const celebrities = await query.getMany();
+
+        return plainToClass(GetCelebritiesResDto, { celebrities: plainToClass(CelebrityResDto, celebrities), count });
     }
 
     async getCelebrity(slug: string): Promise<CelebrityResDto> {
