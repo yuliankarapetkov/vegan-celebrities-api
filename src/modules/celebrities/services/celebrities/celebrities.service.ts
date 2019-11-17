@@ -12,8 +12,10 @@ export class CelebritiesService {
         private _celebrityRepository: CelebrityRepository
     ) {}
 
-    getCelebrities() {
+    async getCelebrities() {
+        const [ celebrities, count ] = await this._celebrityRepository.findAndCount();
 
+        return { celebrities: plainToClass(CelebrityResDto, celebrities), count };
     }
 
     async getCelebrity(slug: string): Promise<CelebrityResDto> {

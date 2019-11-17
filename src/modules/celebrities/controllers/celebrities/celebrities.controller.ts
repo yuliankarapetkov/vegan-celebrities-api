@@ -12,7 +12,7 @@ export class CelebritiesController {
 
     @Get()
     getCelebrities() {
-        return [1, 2, 3];
+        return this._celebritiesService.getCelebrities();
     }
 
     @Get('/:slug')
