@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, Unique, BeforeInsert, BeforeUpdate } from 'typeorm';
 
 @Entity('Celebrity')
 @Unique(['slug'])
@@ -51,4 +51,21 @@ export class CelebrityEntity extends BaseEntity {
 
     @Column({ nullable: true })
     twitterUrl: string;
+
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    updatedAt: Date;
+
+    @BeforeInsert()
+    beforeInsert(): void {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    @BeforeUpdate()
+    beforeUpdate(): void {
+        this.updatedAt = new Date();
+    }
 }

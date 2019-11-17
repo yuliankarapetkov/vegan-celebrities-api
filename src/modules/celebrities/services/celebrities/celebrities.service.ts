@@ -25,6 +25,8 @@ export class CelebritiesService {
 
         const count = await query.clone().getCount();
 
+        query.orderBy('UPPER(celebrity.name)', 'ASC');
+
         if (limit) {
             query.limit(limit);
         }
