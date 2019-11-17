@@ -58,7 +58,7 @@ export class CelebritiesService {
 
         await updatedEntity.save();
 
-        return plainToClass(CelebrityResDto, celebrityEntity);
+        return plainToClass(CelebrityResDto, updatedEntity);
     }
 
     async deleteCelebrity(slug: string): Promise<void> {
