@@ -1,8 +1,10 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, UsePipes, ValidationPipe } from '@nestjs/common';
 
+import { CelebrityReqDto } from './../../dtos';
 import { CelebritiesService } from './../../services';
 
 @Controller('celebrities')
+@UsePipes(new ValidationPipe({ transform: true }))
 export class CelebritiesController {
     constructor(
         private _celebritiesService: CelebritiesService
@@ -13,8 +15,13 @@ export class CelebritiesController {
         return [1, 2, 3];
     }
 
+    @Get('/:slug')
+    getCelebrity(@Param('slug') slug: string) {
+        return this._celebritiesService.getCelebrity(slug);
+    }
+
     @Post()
-    createCelebrity() {
-        return this._celebritiesService.createCelebrity();
+    createCelebrity(@Body() celebrityDto: CelebrityReqDto ) {
+        return this._celebritiesService.createCelebrity(celebrityDto);
     }
 }
