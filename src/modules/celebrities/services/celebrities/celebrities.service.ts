@@ -16,23 +16,23 @@ export class CelebritiesService {
 
     }
 
-    async getCelebrity(slug: string) {
-        const celebrity = await this._celebrityRepository.findOne({ where: { slug } });
+    async getCelebrity(slug: string): Promise<CelebrityResDto> {
+        const celebrityEntity = await this._celebrityRepository.findOne({ where: { slug } });
 
-        if (!celebrity) {
+        if (!celebrityEntity) {
             throw new NotFoundException(`Celebrity ${slug} not found.`);
         }
 
-        return celebrity;
+        return plainToClass(CelebrityResDto, celebrityEntity);
     }
 
 
 
-    async createCelebrity(celebrityDto: CelebrityReqDto) {
+    async createCelebrity(celebrityDto: CelebrityReqDto): Promise<CelebrityResDto> {
         const celebrityEntity = plainToClass(CelebrityEntity, celebrityDto);
 
-        const res = plainToClass(CelebrityResDto, await celebrityEntity.save())
+        await celebrityEntity.save();
 
-        return res;
+        return plainToClass(CelebrityResDto, celebrityEntity);
     }
 }
