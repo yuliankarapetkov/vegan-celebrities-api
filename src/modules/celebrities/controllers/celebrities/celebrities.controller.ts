@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Param, Body, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, UsePipes, ValidationPipe, Put, Delete } from '@nestjs/common';
 
-import { CelebrityReqDto } from './../../dtos';
+import { CelebrityReqDto, CelebrityResDto } from './../../dtos';
 import { CelebritiesService } from './../../services';
 
 @Controller('celebrities')
@@ -16,12 +16,22 @@ export class CelebritiesController {
     }
 
     @Get('/:slug')
-    getCelebrity(@Param('slug') slug: string) {
+    getCelebrity(@Param('slug') slug: string): Promise<CelebrityResDto> {
         return this._celebritiesService.getCelebrity(slug);
     }
 
     @Post()
-    createCelebrity(@Body() celebrityDto: CelebrityReqDto ) {
+    createCelebrity(@Body() celebrityDto: CelebrityReqDto): Promise<CelebrityResDto> {
         return this._celebritiesService.createCelebrity(celebrityDto);
+    }
+
+    @Put('/:slug')
+    updateCelebrity(@Param('slug') slug: string, @Body() celebrityDto: CelebrityReqDto): Promise<CelebrityResDto> {
+        return this._celebritiesService.updateCelebrity(slug, celebrityDto);
+    }
+
+    @Delete('/:slug')
+    deleteCelebrity(@Param('slug') slug: string): Promise<void> {
+        return this._celebritiesService.deleteCelebrity(slug);
     }
 }

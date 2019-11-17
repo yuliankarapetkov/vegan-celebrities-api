@@ -17,16 +17,10 @@ export class CelebritiesService {
     }
 
     async getCelebrity(slug: string): Promise<CelebrityResDto> {
-        const celebrityEntity = await this._celebrityRepository.findOne({ where: { slug } });
-
-        if (!celebrityEntity) {
-            throw new NotFoundException(`Celebrity ${slug} not found.`);
-        }
+        const celebrityEntity = await this._getCelebrity(slug);
 
         return plainToClass(CelebrityResDto, celebrityEntity);
     }
-
-
 
     async createCelebrity(celebrityDto: CelebrityReqDto): Promise<CelebrityResDto> {
         const celebrityEntity = plainToClass(CelebrityEntity, celebrityDto);
@@ -34,5 +28,32 @@ export class CelebritiesService {
         await celebrityEntity.save();
 
         return plainToClass(CelebrityResDto, celebrityEntity);
+    }
+
+    async updateCelebrity(slug: string, celebrityDto: CelebrityReqDto): Promise<CelebrityResDto> {
+        const celebrityEntity = await this._getCelebrity(slug);
+        const updatedEntity = plainToClassFromExist(celebrityEntity, celebrityDto);
+
+        await updatedEntity.save();
+
+        return plainToClass(CelebrityResDto, celebrityEntity);
+    }
+
+    async deleteCelebrity(slug: string): Promise<void> {
+        const { affected } = await this._celebrityRepository.delete({ slug });
+
+        if (!affected) {
+            throw new NotFoundException(`Celebrity ${slug} not found.`);
+        }
+    }
+
+    private async _getCelebrity(slug: string): Promise<CelebrityEntity> {
+        const celebrityEntity = await this._celebrityRepository.findOne({ where: { slug } });
+
+        if (!celebrityEntity) {
+            throw new NotFoundException(`Celebrity ${slug} not found.`);
+        }
+
+        return celebrityEntity;
     }
 }
