@@ -6,6 +6,8 @@ import { CelebrityReqDto, CelebrityResDto, GetCelebritiesReqDto, GetCelebritiesR
 import { CelebrityEntity } from './../../entities';
 import { CelebrityRepository } from './../../repositories';
 
+import * as faker from 'faker';
+
 @Injectable()
 export class CelebritiesService {
     constructor(
@@ -68,6 +70,31 @@ export class CelebritiesService {
 
         if (!affected) {
             throw new NotFoundException(`Celebrity ${slug} not found.`);
+        }
+    }
+
+    async seed(count = 1000): Promise<void> {
+        for (let i = 0; i < 1000; i++) {
+            const name = faker.name.findName();
+            const slug = name.split(' ').join('-').toLowerCase();
+
+            const celebrity = {
+                name,
+                slug,
+                about: faker.lorem.text(1),
+                category: faker.name.jobArea(),
+                occupation: faker.name.jobTitle(),
+                imageUrl: faker.image.imageUrl(),
+                birthdate: faker.date.past(100),
+                birthplace: faker.address.country,
+                height: faker.random.number(250),
+                partner: faker.name.findName(),
+                wikiUrl: faker.internet.url()
+            };
+
+            const celebrityEntity = plainToClass(CelebrityEntity, celebrity);
+
+            await celebrityEntity.save();
         }
     }
 
