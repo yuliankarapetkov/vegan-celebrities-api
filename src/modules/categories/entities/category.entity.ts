@@ -1,6 +1,6 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-import { OccupationEntity } from './occupation.entity';
+import { OccupationEntity } from './../../occupations/entities';
 
 @Entity('Category')
 export class CategoryEntity extends BaseEntity {

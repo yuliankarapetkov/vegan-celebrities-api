@@ -1,7 +1,8 @@
+
 import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 
+import { CategoryEntity } from './../../categories/entities/category.entity';
 import { CelebrityEntity } from './../../celebrities/entities';
-import { CategoryEntity } from './category.entity';
 
 @Entity('Occupation')
 export class OccupationEntity extends BaseEntity {
