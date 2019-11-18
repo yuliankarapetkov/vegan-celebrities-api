@@ -17,6 +17,9 @@ export class CelebritiesService {
     async getCelebrities({ search, limit, offset }: GetCelebritiesReqDto): Promise<GetCelebritiesResDto> {
         const query = this._celebrityRepository.createQueryBuilder('celebrity');
 
+        query.leftJoinAndSelect('celebrity.occupation', 'occupation');
+        query.leftJoinAndSelect('occupation.category', 'category');
+
         if (search) {
             query
                 .andWhere('UPPER(celebrity.name) LIKE UPPER(:search)', { search: `%${search}%` })
@@ -39,10 +42,10 @@ export class CelebritiesService {
 
         const celebrities = await query.getMany();
 
-        return plainToClass(GetCelebritiesResDto, { celebrities: plainToClass(CelebrityResDto, celebrities), count });
+        return plainToClass(GetCelebritiesResDto, { celebrities, count });
     }
 
-    async getCelebrity(slug: string): Promise<CelebrityResDto> {
+    async getCelebrity(slug: string): Promise<any> {
         const celebrityEntity = await this._getCelebrity(slug);
 
         return plainToClass(CelebrityResDto, celebrityEntity);
@@ -53,7 +56,7 @@ export class CelebritiesService {
 
         await celebrityEntity.save();
 
-        return plainToClass(CelebrityResDto, celebrityEntity);
+        return plainToClass(CelebrityResDto, await this._celebrityRepository.findOne(celebrityEntity.id));
     }
 
     async updateCelebrity(slug: string, celebrityDto: CelebrityReqDto): Promise<CelebrityResDto> {

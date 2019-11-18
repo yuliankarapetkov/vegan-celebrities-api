@@ -1,4 +1,6 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type, Transform } from 'class-transformer';
+
+import { Sex } from './../enums';
 
 @Exclude()
 export class CelebrityResDto {
@@ -15,19 +17,27 @@ export class CelebrityResDto {
     about: string;
 
     @Expose()
-    category: string;
+    sex: Sex;
 
     @Expose()
-    occupation: string;
+    country: string;
+
+    @Expose()
+    @Transform((value, obj, type) => {
+        const { id, name } = obj.occupation.category;
+        return { id, name };
+    })
+    category: { id: number; name: string; };
+
+    @Expose()
+    @Transform((value) => ({ id: value.id, name: value.name }))
+    occupation: { id: number; name: string; };
 
     @Expose()
     imageUrl: string;
 
     @Expose()
     birthdate: Date;
-
-    @Expose()
-    birthplace: string;
 
     @Expose()
     hegiht: number;

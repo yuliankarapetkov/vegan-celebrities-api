@@ -1,5 +1,7 @@
-import { IsNumber, Min, Max, IsOptional, IsString, MaxLength, IsDate, MinLength } from 'class-validator';
+import { IsNumber, Min, Max, IsOptional, IsString, MaxLength, IsDate, MinLength, IsISO31661Alpha2, IsEnum } from 'class-validator';
 import { Type, Exclude, Expose } from 'class-transformer';
+
+import { Sex } from '../enums';
 
 @Exclude()
 export class CelebrityReqDto {
@@ -20,14 +22,18 @@ export class CelebrityReqDto {
     about: string;
 
     @Expose()
-    @IsString()
-    @MaxLength(50)
-    category: string;
+    @IsEnum(Sex)
+    sex: Sex;
 
     @Expose()
     @IsString()
-    @MaxLength(50)
-    occupation: string;
+    @IsISO31661Alpha2()
+    country: string;
+
+    @Expose()
+    @IsNumber()
+    @Type(() => Number)
+    occupationId: number;
 
     @Expose()
     @IsString()
@@ -39,11 +45,6 @@ export class CelebrityReqDto {
     @IsDate()
     @Type(() => Date)
     birthdate: Date;
-
-    @Expose()
-    @IsOptional()
-    @IsString()
-    birthplace: string;
 
     @Expose()
     @IsOptional()

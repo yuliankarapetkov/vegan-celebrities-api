@@ -1,4 +1,7 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, Unique, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, Unique, BeforeInsert, BeforeUpdate, ManyToOne } from 'typeorm';
+
+import { Sex } from './../enums';
+import { OccupationEntity } from './occupation.entity';
 
 @Entity('Celebrity')
 @Unique(['slug'])
@@ -16,19 +19,22 @@ export class CelebrityEntity extends BaseEntity {
     about: string;
 
     @Column()
-    category: string;
+    sex: Sex;
 
     @Column()
-    occupation: string;
+    country: string;
+
+    @ManyToOne(type => OccupationEntity, occupation => occupation.celebrities, { eager: true })
+    occupation: OccupationEntity;
+
+    @Column()
+    occupationId: number;
 
     @Column()
     imageUrl: string;
 
     @Column({ nullable: true })
     birthdate: Date;
-
-    @Column({ nullable: true })
-    birthplace: string;
 
     @Column({ nullable: true })
     hegiht: number;
