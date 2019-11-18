@@ -1,7 +1,7 @@
-import { CelebrityRepository } from './celebrities/celebrity.repository';
+import { CelebrityRepository } from './celebrity/celebrity.repository';
 
 export const repositories = [
     CelebrityRepository
 ];
 
-export * from './celebrities/celebrity.repository';
+export * from './celebrity/celebrity.repository';

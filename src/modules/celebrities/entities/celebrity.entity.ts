@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, Unique, BeforeInsert, BeforeUpdate, ManyToOne } from 'typeorm';
 
 import { Sex } from './../enums';
-import { OccupationEntity } from './occupation.entity';
+import { OccupationEntity } from './../../occupations/entities';
 
 @Entity('Celebrity')
 @Unique(['slug'])
