@@ -14,7 +14,7 @@ export class CelebritiesService {
         private _celebrityRepository: CelebrityRepository
     ) {}
 
-    async getCelebrities({ search, limit, offset }: GetCelebritiesReqDto): Promise<GetCelebritiesResDto> {
+    async getCelebrities({ search, category, sex, country, limit, offset }: GetCelebritiesReqDto): Promise<GetCelebritiesResDto> {
         const query = this._celebrityRepository.createQueryBuilder('celebrity');
 
         query.leftJoinAndSelect('celebrity.occupation', 'occupation');
@@ -25,6 +25,18 @@ export class CelebritiesService {
                 .andWhere('UPPER(celebrity.name) LIKE UPPER(:search)', { search: `%${search}%` })
                 .orWhere('UPPER(celebrity.about) LIKE UPPER(:search)', { search: `%${search}%` })
                 .orWhere('UPPER(celebrity.partner) LIKE UPPER(:search)', { search: `%${search}%` });
+        }
+
+        if (category) {
+            query.andWhere('occupation.categoryId = :category', { category });
+        }
+
+        if (sex) {
+            query.andWhere('celebrity.sex = :sex', { sex });
+        }
+
+        if (country) {
+            query.andWhere('celebrity.country = :country', { country });
         }
 
         const count = await query.clone().getCount();
