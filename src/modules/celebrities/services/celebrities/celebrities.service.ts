@@ -32,11 +32,11 @@ export class CelebritiesService {
         }
 
         if (sex) {
-            query.andWhere('celebrity.sex = :sex', { sex });
+            query.andWhere('UPPER(celebrity.sex) = UPPER(:sex)', { sex });
         }
 
         if (country) {
-            query.andWhere('celebrity.country = :country', { country });
+            query.andWhere('UPPER(celebrity.country) = UPPER(:country)', { country });
         }
 
         const count = await query.clone().getCount();
