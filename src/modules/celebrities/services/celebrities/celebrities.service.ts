@@ -24,7 +24,6 @@ export class CelebritiesService {
             query
                 .andWhere('UPPER(celebrity.name) LIKE UPPER(:search)', { search: `%${search}%` })
                 .orWhere('UPPER(celebrity.about) LIKE UPPER(:search)', { search: `%${search}%` })
-                .orWhere('UPPER(celebrity.occupation) LIKE UPPER(:search)', { search: `%${search}%` })
                 .orWhere('UPPER(celebrity.partner) LIKE UPPER(:search)', { search: `%${search}%` });
         }
 
