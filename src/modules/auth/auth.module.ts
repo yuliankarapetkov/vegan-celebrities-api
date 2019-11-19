@@ -5,7 +5,9 @@ import { strategies, HttpBearerStrategy } from './strategies';
 
 @Module({
     imports: [
-        PassportModule.register({}),
+        PassportModule.register({
+            defaultStrategy: 'bearer'
+        }),
     ],
     providers: [
         ...strategies
