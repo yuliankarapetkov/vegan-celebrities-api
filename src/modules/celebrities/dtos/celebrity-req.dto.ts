@@ -52,7 +52,7 @@ export class CelebrityReqDto {
     @Type(() => Number)
     @Min(50)
     @Max(280)
-    hegiht: number;
+    height: number;
 
     @Expose()
     @IsOptional()

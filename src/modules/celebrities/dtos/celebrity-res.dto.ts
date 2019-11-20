@@ -40,7 +40,7 @@ export class CelebrityResDto {
     birthdate: Date;
 
     @Expose()
-    hegiht: number;
+    height: number;
 
     @Expose()
     partner: string;
