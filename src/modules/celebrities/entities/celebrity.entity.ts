@@ -37,7 +37,7 @@ export class CelebrityEntity extends BaseEntity {
     birthdate: Date;
 
     @Column({ nullable: true })
-    hegiht: number;
+    height: number;
 
     @Column({ nullable: true })
     partner: string;
