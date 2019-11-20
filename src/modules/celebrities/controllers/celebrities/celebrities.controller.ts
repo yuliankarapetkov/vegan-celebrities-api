@@ -45,10 +45,10 @@ export class CelebritiesController {
         return this._celebritiesService.deleteCelebrity(slug);
     }
 
-    @Post('/seed')
-    @UseGuards(AuthGuard(), RolesGuard)
-    @Roles(UserRole.Admin)
-    seedCelebrities(): Promise<void> {
-        return this._celebritiesService.seed();
-    }
+    // @Post('/seed')
+    // @UseGuards(AuthGuard(), RolesGuard)
+    // @Roles(UserRole.Admin)
+    // seedCelebrities(): Promise<void> {
+    //     return this._celebritiesService.seed();
+    // }
 }
